@@ -1,0 +1,5 @@
+{
+  "name": "Copy of RoboDynamics Viz",
+  "description": "An industrial robot dynamics visualization tool. It calculates and visualizes joint torques based on kinematics (position, velocity, acceleration) and allows AI-powered analysis of the motion profile.",
+  "requestFramePermissions": []
+}
