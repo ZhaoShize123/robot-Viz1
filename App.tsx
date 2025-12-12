@@ -316,7 +316,7 @@ const App: React.FC = () => {
 
         {/* Right: Charts */}
         <div className="lg:col-span-5 flex flex-col gap-6 h-full overflow-y-auto pr-2">
-           <div className="h-1/2 min-h-[250px]">
+           <div className="h-[45%] min-h-[250px]">
               <DynamicsCharts history={history} currentJoints={joints} />
            </div>
            <div className="flex-1 min-h-[300px]">

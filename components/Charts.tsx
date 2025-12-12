@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { JointState } from '../types';
 
 interface HistoryEntry {
@@ -90,62 +90,40 @@ export const DynamicsCharts: React.FC<ChartsProps> = ({ history, currentJoints }
     j6: h.torques[5],
   }));
 
-  const barData = currentJoints.map((j, idx) => ({
-    name: `J${idx + 1}`,
-    torque: Math.abs(j.torque),
-    limit: [200, 200, 100, 50, 30, 20][idx] // Fictional torque limits
-  }));
-
   return (
     <div className="flex flex-col gap-4 h-full">
-      
-      {/* Real-time Torque Monitor (Bar) */}
-      <div className="bg-slate-800 p-4 rounded-lg border border-slate-700 h-1/3 flex flex-col">
-        <h3 className="text-sm font-bold text-slate-300 mb-2">Instantaneous Torque Load (Abs)</h3>
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={barData} layout="vertical">
-            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-            <XAxis type="number" stroke="#94a3b8" domain={[0, 100]} allowDataOverflow={true} />
-            <YAxis dataKey="name" type="category" stroke="#94a3b8" width={30} />
-            <Tooltip 
-              contentStyle={{ backgroundColor: '#1e293b', borderColor: '#475569' }}
-              itemStyle={{ color: '#e2e8f0' }}
-              cursor={{fill: '#334155', opacity: 0.4}}
-            />
-            <Bar 
-              dataKey="torque" 
-              fill="#f59e0b" 
-              radius={[0, 4, 4, 0]} 
-              name="Torque (Nm)" 
-              isAnimationActive={false}
-            />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-
-      {/* Historical Torque Lines */}
-      <div className="bg-slate-800 p-4 rounded-lg border border-slate-700 h-2/3 flex flex-col">
-        <h3 className="text-sm font-bold text-slate-300 mb-2 flex justify-between">
+      {/* Historical Torque Lines - Now Full Height */}
+      <div className="bg-slate-800 p-4 rounded-lg border border-slate-700 h-full flex flex-col shadow-lg">
+        <h3 className="text-sm font-bold text-slate-300 mb-2 flex justify-between items-center">
           <span>Joint Torque History (Nm)</span>
-          <span className="text-xs text-orange-400 bg-orange-900/30 px-2 py-0.5 rounded border border-orange-500/30">Dynamics Only (Friction Subtracted)</span>
+          <span className="text-[10px] font-mono text-orange-400 bg-orange-900/30 px-2 py-0.5 rounded border border-orange-500/30">
+            DYNAMICS ONLY (Friction Removed)
+          </span>
         </h3>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={lineData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.5} />
             <XAxis dataKey="time" hide />
-            <YAxis stroke="#94a3b8" domain={[-100, 100]} allowDataOverflow={true} />
+            <YAxis 
+               stroke="#94a3b8" 
+               domain={[-100, 100]} 
+               allowDataOverflow={true} 
+               tick={{fontSize: 10}}
+               width={35}
+            />
             <Tooltip 
               contentStyle={{ backgroundColor: '#1e293b', borderColor: '#475569' }}
-              itemStyle={{ color: '#e2e8f0' }}
-              labelStyle={{ color: '#94a3b8' }}
+              itemStyle={{ color: '#e2e8f0', fontSize: '11px' }}
+              labelStyle={{ color: '#94a3b8', fontSize: '11px' }}
               isAnimationActive={false}
             />
-            <Legend wrapperStyle={{ fontSize: '12px' }}/>
-            <Line isAnimationActive={false} type="monotone" dataKey="j1" stroke="#3b82f6" dot={false} strokeWidth={2} name="J1 (Base)" />
-            <Line isAnimationActive={false} type="monotone" dataKey="j2" stroke="#ef4444" dot={false} strokeWidth={2} name="J2 (Shldr)" />
-            <Line isAnimationActive={false} type="monotone" dataKey="j3" stroke="#10b981" dot={false} strokeWidth={2} name="J3 (Elbow)" />
-            {/* Hiding wrist joints to reduce clutter, or make them thinner/transparent */}
-            <Line isAnimationActive={false} type="monotone" dataKey="j4" stroke="#8b5cf6" dot={false} strokeWidth={1} strokeDasharray="3 3" name="J4" />
+            <Legend wrapperStyle={{ fontSize: '11px' }} iconSize={10} />
+            <Line isAnimationActive={false} type="monotone" dataKey="j1" stroke="#3b82f6" dot={false} strokeWidth={2} name="J1" />
+            <Line isAnimationActive={false} type="monotone" dataKey="j2" stroke="#ef4444" dot={false} strokeWidth={2} name="J2" />
+            <Line isAnimationActive={false} type="monotone" dataKey="j3" stroke="#10b981" dot={false} strokeWidth={2} name="J3" />
+            <Line isAnimationActive={false} type="monotone" dataKey="j4" stroke="#8b5cf6" dot={false} strokeWidth={1.5} name="J4" />
+            <Line isAnimationActive={false} type="monotone" dataKey="j5" stroke="#f59e0b" dot={false} strokeWidth={1.5} name="J5" />
+            <Line isAnimationActive={false} type="monotone" dataKey="j6" stroke="#ec4899" dot={false} strokeWidth={1.5} name="J6" />
           </LineChart>
         </ResponsiveContainer>
       </div>
